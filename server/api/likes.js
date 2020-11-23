@@ -58,11 +58,22 @@ router.post('/', async (req, res, next) => {
       description: movie.description
     }
     if (friendMovieLike) {
-      await Match.create(matchInfo)
-      console.log('created match!')
+      const matchExists = await Match.findOne({
+        where: {
+          movieId: movie.id,
+          userId: friend.id
+        }
+      })
+      if (!matchExists) {
+        await Match.create(matchInfo)
+        console.log('created match!')
+      } else if (matchExists) {
+        console.log('match exists!')
+      }
     } else {
       console.log('match not created!')
     }
+    console.log(newLike)
     res.json(newLike)
   } catch (err) {
     next(err)
