@@ -1,25 +1,28 @@
 const router = require('express').Router()
-const {Movie} = require('../db/models')
-// const permit = require('./authorization')
+const {Match, User, Movie} = require('../db/models')
 module.exports = router
 
-router.get('/:id', async (req, res, next) => {
-  try {
-    console.log(req.params)
-    const singleMovie = await Movie.findByPk(req.params.id)
-    console.log(singleMovie)
-    res.json(singleMovie)
-  } catch (err) {
-    next(err)
-  }
-})
+// router.get('/:id', async (req, res, next) => {
+//   try {
+//     console.log(req.params)
+//     const singleMovie = await Movie.findByPk(req.params.id)
+//     console.log(singleMovie)
+//     res.json(singleMovie)
+//   } catch (err) {
+//     next(err)
+//   }
+// })
 
-//GET /api/movies
-router.get('/', async (req, res, next) => {
+//GET /api/matches/:userId
+router.get('/:userId', async (req, res, next) => {
   try {
-    const movies = await Movie.findAll()
-    console.log(movies)
-    res.json(movies)
+    const matches = await Match.findAll({
+      where: {
+        userId: req.params.userId
+      }
+    })
+    console.log(matches)
+    res.json(matches)
   } catch (err) {
     next(err)
   }

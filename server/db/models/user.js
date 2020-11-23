@@ -31,6 +31,10 @@ const User = db.define('user', {
   googleId: {
     type: Sequelize.STRING
   }
+  // friendId: {
+  //   type: Sequelize.INTEGER,
+  //   defaultValue: 1
+  // }
 })
 
 module.exports = User

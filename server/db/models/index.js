@@ -13,6 +13,7 @@ User.belongsToMany(Movie, {through: Match})
 Movie.belongsToMany(User, {through: Match})
 Like.belongsTo(User)
 Like.belongsTo(Movie)
+User.hasOne(User, {as: 'friend'})
 
 /**
  * We'll export all of our models here, so that any time a module needs a model,

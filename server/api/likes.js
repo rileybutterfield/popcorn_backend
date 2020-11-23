@@ -1,5 +1,5 @@
 const router = require('express').Router()
-const {Like, Movie, User} = require('../db/models')
+const {Like, Movie, User, Match} = require('../db/models')
 // const permit = require('./authorization')
 module.exports = router
 
@@ -19,6 +19,51 @@ router.get('/', async (req, res, next) => {
   try {
     const likedMovies = await Like.findAll({include: [Movie, User]})
     res.json(likedMovies)
+  } catch (err) {
+    next(err)
+  }
+})
+// /post /api/likes
+router.post('/', async (req, res, next) => {
+  try {
+    // console.log(req.body)
+    const userResult = await User.findOne({
+      where: {
+        id: req.body.userId
+      }
+    })
+    const user = userResult.dataValues
+    const friendResult = await User.findOne({
+      where: {
+        id: user.friendId
+      }
+    })
+    const friend = friendResult.dataValues
+    const newLike = await Like.create(req.body)
+    const friendMovieLike = await Like.findOne({
+      where: {
+        userId: friend.id,
+        movieId: req.body.movieId
+      }
+    })
+    const movieResult = await Movie.findByPk(req.body.movieId)
+    const movie = movieResult.dataValues
+    const matchInfo = {
+      userId: user.id,
+      movieId: movie.id,
+      title: movie.title,
+      image: movie.image,
+      runtime: movie.runtime,
+      genre: movie.genre,
+      description: movie.description
+    }
+    if (friendMovieLike) {
+      await Match.create(matchInfo)
+      console.log('created match!')
+    } else {
+      console.log('match not created!')
+    }
+    res.json(newLike)
   } catch (err) {
     next(err)
   }
@@ -45,16 +90,6 @@ router.get('/', async (req, res, next) => {
 //       }
 //     })
 //     res.json(pastry)
-//   } catch (err) {
-//     next(err)
-//   }
-// })
-
-// // /post /api/products
-// router.post('/', permit(['admin']), async (req, res, next) => {
-//   try {
-//     const newProduct = await Product.create(req.body)
-//     res.json(newProduct)
 //   } catch (err) {
 //     next(err)
 //   }
