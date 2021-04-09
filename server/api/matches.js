@@ -16,19 +16,16 @@ const {Op} = require('sequelize')
 //GET /api/matches/:userId
 router.get('/:userId', async (req, res, next) => {
   try {
-    const userResult = await User.findOne({
+    const user = await User.findOne({
       where: {
         id: req.params.userId
       }
     })
-    const user = userResult.dataValues
-    const friendResult = await User.findOne({
+    const friend = await User.findOne({
       where: {
         id: user.friendId
       }
     })
-    const friend = friendResult.dataValues
-    console.log(friend)
     const matches = await Match.findAll({
       where: {
         [Op.or]: [{userId: req.params.userId}, {userId: friend.id}]
