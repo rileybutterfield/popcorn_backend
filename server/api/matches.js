@@ -16,6 +16,7 @@ router.get('/:userId', async (req, res, next) => {
         id: user.friendId
       }
     })
+
     const matches = await Match.findAll({
       where: {
         [Op.or]: [{userId: req.params.userId}, {userId: friend.id}]
