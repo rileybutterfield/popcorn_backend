@@ -9,7 +9,7 @@ const moviesArray = [
       "A rat named Remy dreams of becoming a great French chef despite his family's wishes and the obvious problem of being a rat in a decidedly rodent-phobic profession. When fate places Remy in the sewers of Paris, he finds himself ideally situated beneath a restaurant made famous by his culinary hero, Auguste Gusteau."
   },
   {
-    title: "She's All That",
+    title: "She's All That!",
     image:
       'https://images-na.ssl-images-amazon.com/images/I/51Iuj5srm4L._SX342_.jpg',
     runtime: '120 minutes',

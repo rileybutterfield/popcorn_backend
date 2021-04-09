@@ -27,18 +27,45 @@ const likesArray = [
   }
 ]
 
+const matchArray = [
+  {
+    title: 'Ratatouille',
+    image:
+      'https://sites.psu.edu/favoriteanimatedmovies/files/2017/03/ratatouille-25z0vgo.jpg',
+    runtime: '120 minutes',
+    genre: 'Kids',
+    description:
+      "A rat named Remy dreams of becoming a great French chef despite his family's wishes and the obvious problem of being a rat in a decidedly rodent-phobic profession. When fate places Remy in the sewers of Paris, he finds himself ideally situated beneath a restaurant made famous by his culinary hero, Auguste Gusteau.",
+    userId: 1,
+    movieId: 2
+  }
+]
+
 async function seed() {
   await db.sync({force: true})
   console.log('db synced!')
 
-  const users = await Promise.all([
-    User.create({name: 'cody', email: 'cody@email.com', password: '12345'}),
-    User.create({name: 'murphy', email: 'murphy@email.com', password: '12345'})
-  ])
+  const cody = await User.create({
+    name: 'cody',
+    email: 'cody@email.com',
+    password: '12345'
+  })
+  const murphy = await User.create({
+    name: 'murphy',
+    email: 'murphy@email.com',
+    password: '12345'
+  })
+  cody.setFriend(murphy)
+  murphy.setFriend(cody)
 
   const movies = await Promise.all(
     moviesArray.map(movie => {
       return Movie.create(movie)
+    })
+  )
+  const matches = await Promise.all(
+    matchArray.map(match => {
+      return Match.create(match)
     })
   )
 
@@ -48,9 +75,9 @@ async function seed() {
     })
   )
 
-  console.log(`seeded ${users.length} users`)
   console.log(`seeded ${movies.length} movies`)
   console.log(`seeded ${likes.length} likes`)
+  console.log(`seeded ${matches.length} likes`)
   console.log(`seeded successfully`)
 }
 
